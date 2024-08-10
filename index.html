@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #game-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="number"] {
+            width: 50px;
+            padding: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <h1>Guess the Number</h1>
+    <p>Pick a number between 1 and 10:</p>
+    <input type="number" id="guess" min="1" max="10">
+    <button onclick="submitGuess()">Submit</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    function submitGuess() {
+        const guess = document.getElementById('guess').value;
+
+        if (guess < 1 || guess > 10) {
+            alert('Please choose a number between 1 and 10.');
+            return;
+        }
+
+        fetch('server.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `guess=${guess}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('result').innerText = `${data.message} Your total points: ${data.points}`;
+        });
+    }
+</script>
+
+</body>
+</html>
